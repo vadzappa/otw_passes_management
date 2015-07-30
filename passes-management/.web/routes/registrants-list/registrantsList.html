@@ -37,7 +37,7 @@
             <tbody>
             <tr ng-repeat="user in people | filter:query | orderBy:orderProp">
                 <td>
-                    <a href="#/edit/{{user.id}}"><span class="glyphicon glyphicon-edit"></span></a>
+                    <a href="#/edit/{{user._id}}"><span class="glyphicon glyphicon-edit"></span></a>
                 </td>
                 <td>
                     {{user.name}}
@@ -49,13 +49,13 @@
                     {{user.email}}
                 </td>
                 <td>
-                    {{user.passType}}
+                    {{user.passType.value}}
                 </td>
                 <td>
-                    {{user.gender}}
+                    {{user.gender.value}}
                 </td>
                 <td>
-                    {{user.paymentStatus}}
+                    {{user.paymentStatus.value}}
                 </td>
             </tr>
             </tbody>

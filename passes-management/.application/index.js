@@ -8,8 +8,8 @@ var _ = require('lodash'),
     path = require('path'),
     indexFileLocation = '../static/index.html',
     staticFilesPath = path.join(__dirname, '../static'),
-    usersManagement = require('./user-management/userManagementFeature'),
-    vocabularyManagement = require('./vocabulary-management/vocabularyManagementFeature'),
+    usersManagement = require('./web-services/user-management/userManagementFeature'),
+    vocabularyManagement = require('./web-services/vocabulary-management/vocabularyManagementFeature'),
     dayCache = {
         expiresIn: 24 * 60 * 60 * 1000,
         privacy: 'public'
@@ -17,10 +17,13 @@ var _ = require('lodash'),
     noCache = {
         expiresIn: 0,
         privacy: 'public'
-    };
+    },
+    coreDb = require('./db-service/core/coreDbService');
 
 var PassesManagementPlugin = {
     register: function (server, options, next) {
+
+
 
         server.route({
             method: 'GET',

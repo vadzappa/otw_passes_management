@@ -5,7 +5,7 @@
 </div>
 <div class="container edit-user" ng-controller="EditRegistrantCtrl">
     <form ng-submit="saveUser()">
-        <input type="hidden" id="personId" ng-model="person.id">
+        <input type="hidden" id="personId" ng-model="person._id">
         <div class="form-group">
             <label for="personName">Name</label>
             <input type="text" class="form-control" id="personName" placeholder="Name" ng-model="person.name" required>
@@ -16,21 +16,21 @@
         </div>
         <div class="form-group">
             <label for="personEmail">Email</label>
-            <input type="text" class="form-control" id="personEmail" placeholder="Email" ng-model="person.email" required>
+            <input type="email" class="form-control" id="personEmail" placeholder="Email" ng-model="person.email" required>
         </div>
         <div class="form-group">
             <label for="personPassType">Pass Type</label>
-            <select class="form-control" id="personPassType" ng-model="person.passType.id" ng-options="passType.id as passType.value for passType in passTypes">
+            <select class="form-control" id="personPassType" ng-model="person.passType" ng-options="passType._id as passType.value for passType in passTypes">
             </select>
         </div>
         <div class="form-group">
             <label for="personGender">Gender</label>
-            <select class="form-control" id="personGender" ng-model="person.gender.id" ng-options="gender.id as gender.value for gender in genders">
+            <select class="form-control" id="personGender" ng-model="person.gender" ng-options="gender._id as gender.value for gender in genders">
             </select>
         </div>
         <div class="form-group">
             <label for="personPaymentStatus">Payment Status</label>
-            <select class="form-control" id="personPaymentStatus"  ng-model="person.paymentStatus.id" ng-options="status.id as status.value for status in statuses">
+            <select class="form-control" id="personPaymentStatus"  ng-model="person.paymentStatus" ng-options="status._id as status.value for status in statuses">
             </select>
         </div>
         <button type="submit" class="btn btn-default">Save</button>

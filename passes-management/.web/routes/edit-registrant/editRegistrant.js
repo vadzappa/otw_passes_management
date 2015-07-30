@@ -8,27 +8,36 @@ var template = fs.readFileSync(__filename.replace(/\.js/, '.html'), 'utf-8');
 
 var controller = {
     controller_name: 'EditRegistrantCtrl',
-    services: ['$scope', '$http', '$routeParams', '$location'],
+    services: ['$scope', '$http', '$routeParams', '$location', '$q'],
     route: '/edit/:personId',
     template: function () {
         return template;
     },
-    controller: function ($scope, $http, $routeParams, $location) {
-        $http.get('/people/' + $routeParams.personId + '/')
-            .success(function (data) {
-                $scope.person = data;
-            }).
-            error(function (data, status, headers, config) {
-                $scope.person = {};
-            });
-        $http.get('/passTypes/').success(function (data) {
-            $scope.passTypes = data;
-        });
-        $http.get('/genders/').success(function (data) {
-            $scope.genders = data;
-        });
-        $http.get('/statusesTypes/').success(function (data) {
-            $scope.statuses = data;
+    controller: function ($scope, $http, $routeParams, $location, $q) {
+        $q.all([
+            $http.get('/passTypes/'),
+            $http.get('/genders/'),
+            $http.get('/statusesTypes/')
+        ]).then(function (results) {
+            $scope.passTypes = results[0].data;
+            $scope.genders = results[1].data;
+            $scope.statuses = results[2].data;
+            $http.get('/people/' + $routeParams.personId + '/')
+                .success(function (data) {
+                    $scope.person = data;
+                    if (!$scope.person.passType) {
+                        $scope.person.passType = $scope.passTypes[0]._id;
+                    }
+                    if (!$scope.person.gender) {
+                        $scope.person.gender = $scope.genders[0]._id;
+                    }
+                    if (!$scope.person.paymentStatus) {
+                        $scope.person.paymentStatus = $scope.statuses[0]._id;
+                    }
+                }).
+                error(function (data, status, headers, config) {
+                    $scope.person = {};
+                })
         });
 
         $scope.saveUser = function () {
