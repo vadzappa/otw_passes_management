@@ -1,0 +1,56 @@
+{
+  "connections": [
+    {
+      "port": {
+        "$filter": "system.env",
+        "production": 80,
+        "$default": 80
+      },
+      "labels": [
+        "insecure"
+      ],
+      "load": {
+        "maxHeapUsedBytes": {
+          "$filter": "system.env",
+          "production": 1610612736,
+          "$default": 536870912
+        },
+        "maxRssBytes": {
+          "$filter": "system.env",
+          "production": 3221225472,
+          "$default": 1073741824
+        },
+        "maxEventLoopDelay": 30000
+      },
+      "state": {
+        "ttl": 86400000,
+        "isSecure": false,
+        "path": "/",
+        "isHttpOnly": true
+      }
+    }
+  ],
+  "server": {
+    "load": {
+      "sampleInterval": 5000
+    },
+    "cache": {
+      "name": "memoryCache",
+      "engine": "catbox-memory",
+      "maxByteSize": 26214400
+    }
+  },
+  "plugins": {
+    "passes-management": {
+    },
+    "yar": {
+      "name": "otw_session",
+      "maxCookieSize": 0,
+      "cookieOptions": {
+        "password": "SECURE_PASS",
+        "isSecure": false,
+        "isHttpOnly": true
+      }
+    }
+  }
+}

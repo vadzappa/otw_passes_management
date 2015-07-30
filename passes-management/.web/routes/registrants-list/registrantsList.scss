@@ -1,0 +1,19 @@
+.registrants-list tr td:nth-child(1),
+.registrants-list tr td:nth-child(5),
+.registrants-list tr td:nth-child(6),
+.registrants-list tr td:nth-child(7),
+.registrants-list thead th {
+    text-align: center;
+}
+
+.registrants-list tr:nth-child(odd) td {
+    background-color: #eee;
+}
+
+.registrants-list tr:nth-child(even) td {
+    background-color: #fff;
+}
+
+.registrants-list .glyphicon-edit {
+    font-size: 2em;
+}

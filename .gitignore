@@ -1,0 +1,6 @@
+node_modules/
+.idea/
+development.json
+production.json
+passes-management/static/js/
+passes-management/static/css/

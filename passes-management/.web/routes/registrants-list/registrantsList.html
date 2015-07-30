@@ -1,0 +1,64 @@
+<div class="container" ng-controller="RegistrantsListCtrl">
+    <div class="container">
+        <div class="navbar-form search-area">
+            <div class="form-group">
+                Search:
+                <input class="form-control" ng-model="query">
+            </div>
+            <div class="form-group">
+                Sort by:
+                <select class="form-control" ng-model="orderProp">
+                    <option value="name">Name</option>
+                    <option value="surname">Surname</option>
+                    <option value="email">Email</option>
+                    <option value="passType">Pass Type</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="form-group">
+            <a href="#/edit/-1" class="btn btn-default">Add Person</a>
+        </div>
+    </div>
+    <div class="container">
+        <table class="table table-bordered registrants-list">
+            <thead>
+            <tr>
+                <th>Actions</th>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>Email</th>
+                <th>Pass Type</th>
+                <th>Gender</th>
+                <th>Payment Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="user in people | filter:query | orderBy:orderProp">
+                <td>
+                    <a href="#/edit/{{user.id}}"><span class="glyphicon glyphicon-edit"></span></a>
+                </td>
+                <td>
+                    {{user.name}}
+                </td>
+                <td>
+                    {{user.surname}}
+                </td>
+                <td>
+                    {{user.email}}
+                </td>
+                <td>
+                    {{user.passType}}
+                </td>
+                <td>
+                    {{user.gender}}
+                </td>
+                <td>
+                    {{user.paymentStatus}}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
