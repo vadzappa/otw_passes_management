@@ -2,6 +2,8 @@
 .registrants-list tr td:nth-child(5),
 .registrants-list tr td:nth-child(6),
 .registrants-list tr td:nth-child(7),
+.registrants-list tr td:nth-child(8),
+.registrants-list tr td:nth-child(9),
 .registrants-list thead th {
     text-align: center;
 }
@@ -14,6 +16,6 @@
     background-color: #fff;
 }
 
-.registrants-list .glyphicon-edit {
+.registrants-list .glyphicon {
     font-size: 2em;
 }

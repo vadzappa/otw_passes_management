@@ -12,6 +12,7 @@ var _ = require('lodash'),
     usersManagement = require('./web-services/user-management/userManagementFeature'),
     systemUsersService = require('./db-service/services/users'),
     vocabularyManagement = require('./web-services/vocabulary-management/vocabularyManagementFeature'),
+    ticketsManagement = require('./web-services/tickets-management/ticketsManagementFeature'),
     dayCache = {
         expiresIn: 24 * 60 * 60 * 1000,
         privacy: 'public'
@@ -32,6 +33,15 @@ var PassesManagementPlugin = {
         server.ext('onPreAuth', accessControl.checkAccess);
 
         coreDb.initialize(options.mongoose);
+
+        server.route({
+            method: 'GET',
+            path: '/generate/{personId}/',
+            handler: ticketsManagement.downloadTicket,
+            config: {
+                cache: noCache
+            }
+        });
 
         server.route({
             method: 'GET',

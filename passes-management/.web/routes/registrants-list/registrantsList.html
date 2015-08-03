@@ -32,6 +32,8 @@
                 <th>Pass Type</th>
                 <th>Gender</th>
                 <th>Payment Status</th>
+                <th>Ticket</th>
+                <th>Email Ticket</th>
             </tr>
             </thead>
             <tbody>
@@ -56,6 +58,12 @@
                 </td>
                 <td>
                     {{user.paymentStatus.value}}
+                </td>
+                <td>
+                    <a title="Download PDF ticket" href="/generate/{{user._id}}/"><span class="glyphicon glyphicon-download-alt"></span></a>
+                </td>
+                <td>
+                    <a title="Send PDF ticket" href="/email/{{user._id}}/"><span class="glyphicon glyphicon-envelope"></span></a>
                 </td>
             </tr>
             </tbody>
