@@ -4,7 +4,7 @@
   "description": "OTW Passes Management",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "configure": "node configurator.js"
   },
   "author": "Vadzim Zapolski-Dounar",
   "license": "ISC",
@@ -13,6 +13,7 @@
     "catbox-memory": "^1.1.1",
     "confidence": "^1.1.0",
     "hapi": "^8.8.0",
+    "lodash": "^3.10.0",
     "passes-management": "file:../passes-management",
     "rejoice": "^2.0.0",
     "yar": "^3.0.3"

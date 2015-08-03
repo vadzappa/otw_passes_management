@@ -4,6 +4,7 @@
  */
 
 var angular = require('angular'),
+    // don't remove - used by browserify to provide angular routing library
     angularRoute = require('angular-route'),
     _ = require('lodash'),
     $ = require('jquery'),

@@ -7,8 +7,10 @@ var _ = require('lodash'),
     fs = require('fs'),
     path = require('path'),
     indexFileLocation = '../static/index.html',
+    loginFileLocation = '../static/login.html',
     staticFilesPath = path.join(__dirname, '../static'),
     usersManagement = require('./web-services/user-management/userManagementFeature'),
+    systemUsersService = require('./db-service/services/users'),
     vocabularyManagement = require('./web-services/vocabulary-management/vocabularyManagementFeature'),
     dayCache = {
         expiresIn: 24 * 60 * 60 * 1000,
@@ -18,12 +20,48 @@ var _ = require('lodash'),
         expiresIn: 0,
         privacy: 'public'
     },
-    coreDb = require('./db-service/core/coreDbService');
+    coreDb = require('./db-service/core/coreDbService'),
+    AccessControl = require('./access-control-service');
+
+_.mixin(require('underscore.deferred'));
 
 var PassesManagementPlugin = {
     register: function (server, options, next) {
 
+        var accessControl = new AccessControl(options['access-control']);
+        server.ext('onPreAuth', accessControl.checkAccess);
 
+        coreDb.initialize(options.mongoose);
+
+        server.route({
+            method: 'GET',
+            path: '/login/',
+            handler: function (request, reply) {
+                return reply(fs.createReadStream(path.join(__dirname, loginFileLocation)));
+            },
+            config: {
+                cache: dayCache
+            }
+        });
+
+        server.route({
+            method: 'POST',
+            path: '/login/',
+            handler: function (request, reply) {
+                _.when(systemUsersService.findByLoginAndPassword(request.payload))
+                    .done(function (user) {
+                        request.session.set('user', user);
+                        reply().redirect('/');
+                    })
+                    .fail(function (error) {
+                        console.error(error);
+                        reply(fs.createReadStream(path.join(__dirname, loginFileLocation)));
+                    });
+            },
+            config: {
+                cache: dayCache
+            }
+        });
 
         server.route({
             method: 'GET',

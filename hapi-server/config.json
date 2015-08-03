@@ -41,8 +41,6 @@
     }
   },
   "plugins": {
-    "passes-management": {
-    },
     "yar": {
       "name": "otw_session",
       "maxCookieSize": 0,
@@ -50,6 +48,88 @@
         "password": "SECURE_PASS",
         "isSecure": false,
         "isHttpOnly": true
+      }
+    },
+    "passes-management": {
+      "mongoose": {
+        "connection-string": {
+          "$filter": "system.env",
+          "production": "$$MONGOOSE_CONN_STR",
+          "$default": "mongodb://localhost/test"
+        },
+        "db-data": {
+          "vocabularies": [
+            {
+              "type": "passType",
+              "value": "Full"
+            },
+            {
+              "type": "passType",
+              "value": "Party"
+            },
+            {
+              "type": "passType",
+              "value": "Saturday"
+            },
+            {
+              "type": "passType",
+              "value": "Sunday"
+            },
+            {
+              "type": "gender",
+              "value": "M"
+            },
+            {
+              "type": "gender",
+              "value": "F"
+            },
+            {
+              "type": "status",
+              "value": "PAID"
+            },
+            {
+              "type": "status",
+              "value": "SENT"
+            },
+            {
+              "type": "status",
+              "value": "USED"
+            }
+          ],
+          "roles": [
+            {
+              "roleName": "admin",
+              "allowedPaths": [
+                ".*:/.*"
+              ]
+            },
+            {
+              "roleName": "validator",
+              "allowedPaths": [
+                "GET:/static/.*",
+                ".*:/login/"
+              ]
+            }
+          ],
+          "users": [
+            {
+              "username": "admin",
+              "password": {
+                "$filter": "system.env",
+                "production": "$$OTW_ADMIN_PASSWORD",
+                "$default": "admin"
+              },
+              "roleName": "admin"
+            }
+          ]
+        }
+      },
+      "access-control": {
+        "unauthorized-redirect": "/login/",
+        "anonymous": [
+          "GET:/static/.*",
+          ".*:/login/"
+        ]
       }
     }
   }
