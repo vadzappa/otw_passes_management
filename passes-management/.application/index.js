@@ -84,7 +84,24 @@ var PassesManagementPlugin = {
                 _.when(systemUsersService.findByLoginAndPassword(request.payload))
                     .done(function (user) {
                         request.session.set('user', user);
-                        reply().redirect('/');
+
+                        var redirectAfterLogin = undefined;
+
+                        var requestedPath = request.session.flash('requested-path');
+                        if (requestedPath && requestedPath.length > 0) {
+                            if (_.isArray(requestedPath)) {
+                                redirectAfterLogin = _.first(requestedPath);
+                            } else {
+                                redirectAfterLogin = requestedPath;
+                            }
+                        }
+
+                        if (redirectAfterLogin) {
+                            reply().redirect(redirectAfterLogin);
+                        } else {
+                            reply().redirect('/');
+                        }
+
                     })
                     .fail(function (error) {
                         console.error(error);

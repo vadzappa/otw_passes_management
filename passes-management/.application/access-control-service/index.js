@@ -24,6 +24,10 @@ var AccessControlFeature = function (options) {
                 return pathRegex.test(request.path) && methodRegex.test(request.method);
             });
 
+            if (!pathAllowed) {
+                request.session.flash('requested-path', request.path);
+            }
+
             return pathAllowed ? reply.continue() : reply().redirect(redirectUrl);
 
         }

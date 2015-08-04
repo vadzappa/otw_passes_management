@@ -128,6 +128,15 @@
                 "$default": "admin"
               },
               "roleName": "admin"
+            },
+            {
+              "username": "validator",
+              "password": {
+                "$filter": "system.env",
+                "production": "$$OTW_VALIDATOR_PASSWORD",
+                "$default": "validator"
+              },
+              "roleName": "validator"
             }
           ]
         }
