@@ -30,12 +30,14 @@ ParticipantSchema.methods.ticketUsed = function (cb) {
             if (!error && status) {
                 self.paymentStatus = status;
             }
-            self.save(cb);
+            self.save(function (error) {
+                cb(error || new TicketUsageError('Ticket is FINE', 3));
+            });
         });
     } else if (currentTime - this.ticketUsedTimestamp > maxTicketUsage) {
         cb(new TicketUsageError('Ticket has been used already!', 2));
     } else {
-        cb();
+        cb(new TicketUsageError('Ticket is FINE', 3));
     }
 
 };

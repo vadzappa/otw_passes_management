@@ -103,7 +103,7 @@ var PassesManagementPlugin = {
                 return reply(fs.createReadStream(path.join(__dirname, indexFileLocation)));
             },
             config: {
-                cache: dayCache
+                cache: noCache
             }
         });
 
