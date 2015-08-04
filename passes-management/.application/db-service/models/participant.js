@@ -5,7 +5,7 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     maxTicketUsage = 10 * 60 * 1000,
     VocabularySchema = require('./vocabulary'),
-    TicketUsageError = require('../../errors/ticketUsageError');
+    TicketUsageError = require('../../utils/error/ticketUsageError');
 
 var ParticipantSchema = new Schema({
     name: String,

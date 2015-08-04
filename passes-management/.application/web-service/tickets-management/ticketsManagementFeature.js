@@ -6,8 +6,8 @@
 var _ = require('lodash'),
     CommonManagementFeature = require('../common/managementFeature'),
     ParticipantsService = require('../../db-service/services/participant'),
-    PDFGenerator = require('../../pdfGenerator/pdfGenerator'),
-    QRGenerator = require('../../qrGenerator/qaGenerator');
+    PDFGenerator = require('../../utils/pdfGenerator/pdfGenerator'),
+    QRGenerator = require('../../utils/qrGenerator/qrGenerator');
 
 _.mixin(require('underscore.deferred'));
 

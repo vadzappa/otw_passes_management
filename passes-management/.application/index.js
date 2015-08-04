@@ -7,14 +7,14 @@ var _ = require('lodash'),
     fs = require('fs'),
     path = require('path'),
     indexFileLocation = '../static/index.html',
-    errorWrapper = require('./errors/errorWrapper'),
     loginFileLocation = '../static/login.html',
     staticFilesPath = path.join(__dirname, '../static'),
-    systemUsersService = require('./db-service/services/users'),
-    usersManagement = new require('./web-services/user-management/userManagementFeature'),
-    vocabularyManagement = new require('./web-services/vocabulary-management/vocabularyManagementFeature'),
-    ticketsManagement = new require('./web-services/tickets-management/ticketsManagementFeature'),
-    loggingFeature = require('./logging/loggingFeature'),
+    errorWrapper = require('./web-service/error-wrapper/errorWrapper'),
+    usersManagement = require('./web-service/user-management/userManagementFeature'),
+    vocabularyManagement = require('./web-service/vocabulary-management/vocabularyManagementFeature'),
+    ticketsManagement = require('./web-service/tickets-management/ticketsManagementFeature'),
+    loginManagement = require('./web-service/login-management/loginManagementFeature'),
+    loggingFeature = require('./utils/logging/loggingFeature'),
     dayCache = {
         expiresIn: 24 * 60 * 60 * 1000,
         privacy: 'public'
@@ -80,34 +80,7 @@ var PassesManagementPlugin = {
         server.route({
             method: 'POST',
             path: '/login/',
-            handler: function (request, reply) {
-                _.when(systemUsersService.findByLoginAndPassword(request.payload))
-                    .done(function (user) {
-                        request.session.set('user', user);
-
-                        var redirectAfterLogin = undefined;
-
-                        var requestedPath = request.session.flash('requested-path');
-                        if (requestedPath && requestedPath.length > 0) {
-                            if (_.isArray(requestedPath)) {
-                                redirectAfterLogin = _.first(requestedPath);
-                            } else {
-                                redirectAfterLogin = requestedPath;
-                            }
-                        }
-
-                        if (redirectAfterLogin) {
-                            reply().redirect(redirectAfterLogin);
-                        } else {
-                            reply().redirect('/');
-                        }
-
-                    })
-                    .fail(function (error) {
-                        console.error(error);
-                        reply(fs.createReadStream(path.join(__dirname, loginFileLocation)));
-                    });
-            },
+            handler: loginManagement.userLogin,
             config: {
                 cache: dayCache
             }
