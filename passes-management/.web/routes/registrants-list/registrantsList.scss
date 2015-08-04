@@ -18,4 +18,11 @@
 
 .registrants-list .glyphicon {
     font-size: 2em;
+    transition: color 1s ease;
+    &.success {
+        color: green;
+    }
+    &.error {
+        color: red;
+    }
 }

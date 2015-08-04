@@ -63,7 +63,7 @@
                     <a title="Download PDF ticket" href="/generate/{{user._id}}/"><span class="glyphicon glyphicon-download-alt"></span></a>
                 </td>
                 <td>
-                    <a title="Send PDF ticket" href="/email/{{user._id}}/"><span class="glyphicon glyphicon-envelope"></span></a>
+                    <a title="Send PDF ticket" href="/email/{{user._id}}/" ng-click="sendTicket($event)"><span class="glyphicon glyphicon-envelope"></span></a>
                 </td>
             </tr>
             </tbody>

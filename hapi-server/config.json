@@ -51,6 +51,13 @@
       }
     },
     "passes-management": {
+      "server": {
+        "host": {
+          "$filter": "system.env",
+          "production": "$$SITE_HOST",
+          "$default": "192.168.0.103"
+        }
+      },
       "mongoose": {
         "connection-string": {
           "$filter": "system.env",
@@ -107,6 +114,7 @@
               "roleName": "validator",
               "allowedPaths": [
                 "GET:/static/.*",
+                "GET:/validator/.*",
                 ".*:/login/"
               ]
             }

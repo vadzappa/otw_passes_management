@@ -9,4 +9,8 @@ var VocabularySchema = new Schema({
     value: String
 });
 
+VocabularySchema.statics.findPaidStatus = function findPaidStatus(cb) {
+    return this.findOne({type: 'status', value: 'PAID'}).exec(cb);
+};
+
 module.exports = mongoose.model('Vocabulary', VocabularySchema);

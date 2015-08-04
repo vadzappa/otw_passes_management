@@ -1,0 +1,23 @@
+[class*=error-] {
+    font-size: 10em;
+    text-align: center;
+    color: black;
+    font-weight: bold;
+
+    &.error-1 {
+        background-color: red;
+    }
+
+    &.error-2 {
+        background-color: yellow;
+    }
+
+    &.error-3 {
+        background-color: green;
+    }
+
+    div {
+        width: 100%;
+        margin-top: 15%;
+    }
+}

@@ -19,6 +19,7 @@ var gulp = require('gulp'),
     es = require('event-stream'),
     clientJsFilesWildcard = './.web/**/*.js',
     clientScssFilesWildcard = './.web/**/*.scss',
+    backendScssFilesWildcard = './.application/**/*.scss',
     vendorCssFilesWildcard = './vendor/**/*.css';
 
 gulp.task('clean-js', function (cb) {
@@ -31,7 +32,7 @@ gulp.task('clean-css', function (cb) {
 
 gulp.task('build-styles', function () {
 
-    var sassStylesBuild = gulp.src([clientScssFilesWildcard])
+    var sassStylesBuild = gulp.src([clientScssFilesWildcard, backendScssFilesWildcard])
         .pipe(plumber())
         .pipe(sass({
             errorLogToConsole: true

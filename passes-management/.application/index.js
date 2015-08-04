@@ -7,12 +7,14 @@ var _ = require('lodash'),
     fs = require('fs'),
     path = require('path'),
     indexFileLocation = '../static/index.html',
+    errorWrapper = require('./errors/errorWrapper'),
     loginFileLocation = '../static/login.html',
     staticFilesPath = path.join(__dirname, '../static'),
-    usersManagement = require('./web-services/user-management/userManagementFeature'),
     systemUsersService = require('./db-service/services/users'),
-    vocabularyManagement = require('./web-services/vocabulary-management/vocabularyManagementFeature'),
-    ticketsManagement = require('./web-services/tickets-management/ticketsManagementFeature'),
+    usersManagement = new require('./web-services/user-management/userManagementFeature'),
+    vocabularyManagement = new require('./web-services/vocabulary-management/vocabularyManagementFeature'),
+    ticketsManagement = new require('./web-services/tickets-management/ticketsManagementFeature'),
+    loggingFeature = require('./logging/loggingFeature'),
     dayCache = {
         expiresIn: 24 * 60 * 60 * 1000,
         privacy: 'public'
@@ -29,15 +31,36 @@ _.mixin(require('underscore.deferred'));
 var PassesManagementPlugin = {
     register: function (server, options, next) {
 
+        loggingFeature.bindToServer(server);
+
         var accessControl = new AccessControl(options['access-control']);
         server.ext('onPreAuth', accessControl.checkAccess);
+        server.ext('onPreResponse', errorWrapper.wrapError);
 
         coreDb.initialize(options.mongoose);
 
         server.route({
             method: 'GET',
+            path: '/validator/{ticketNumber}/',
+            handler: ticketsManagement.validateTicket,
+            config: {
+                cache: noCache
+            }
+        });
+
+        server.route({
+            method: 'GET',
             path: '/generate/{personId}/',
-            handler: ticketsManagement.downloadTicket,
+            handler: ticketsManagement.downloadTicket.bind(options),
+            config: {
+                cache: noCache
+            }
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/email/{personId}/',
+            handler: ticketsManagement.emailTicket,
             config: {
                 cache: noCache
             }
@@ -150,6 +173,7 @@ var PassesManagementPlugin = {
 
         return next();
     }
+
 };
 
 _.extend(PassesManagementPlugin.register, {

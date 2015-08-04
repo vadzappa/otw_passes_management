@@ -12,21 +12,43 @@ var ParticipantService = {
         var deferred = new _.Deferred();
         Participant.find(function (error, personsList) {
             if (error) {
-                deferred.resolve([]);
+                deferred.reject(error);
             } else {
                 deferred.resolve(personsList);
             }
         }).
-        populate('passType gender paymentStatus');
+            populate('passType gender paymentStatus');
         return deferred.promise();
     },
     byId: function byId(id) {
         var deferred = new _.Deferred();
         Participant.findById(id, function (error, person) {
             if (error) {
-                deferred.resolve({});
+                deferred.reject(error);
             } else {
                 deferred.resolve(person);
+            }
+        });
+        return deferred.promise();
+    },
+    byTicket: function byTicket(ticketNumber) {
+        var deferred = new _.Deferred();
+        Participant.findOne({ticketNumber: ticketNumber}).populate('paymentStatus').exec(function (error, person) {
+            if (error) {
+                deferred.reject(error);
+            } else {
+                deferred.resolve(person);
+            }
+        });
+        return deferred.promise();
+    },
+    useTicket: function useTicket(participant) {
+        var deferred = new _.Deferred();
+        participant.ticketUsed(function (error) {
+            if (error) {
+                deferred.reject(error);
+            } else {
+                deferred.resolve(participant);
             }
         });
         return deferred.promise();
@@ -36,12 +58,21 @@ var ParticipantService = {
         Participant.findById(participant._id, function (err, result) {
             if (!result) {
                 new Participant(participant).save(function (error) {
-                    deferred.resolve();
+                    if (error) {
+                        deferred.reject(error);
+                    } else {
+                        deferred.resolve();
+                    }
+
                 });
             } else {
                 _.extend(result, _.omit(participant, '_id'));
                 result.save(function (error) {
-                    deferred.resolve();
+                    if (error) {
+                        deferred.reject(error);
+                    } else {
+                        deferred.resolve();
+                    }
                 });
             }
         });

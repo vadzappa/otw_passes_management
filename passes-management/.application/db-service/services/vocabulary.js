@@ -12,7 +12,7 @@ var VocabularyService = {
         var deferred = new _.Deferred();
         Vocabulary.find({type: type}).exec(function (error, personsList) {
             if (error) {
-                deferred.resolve([]);
+                deferred.reject(error);
             } else {
                 deferred.resolve(personsList);
             }
