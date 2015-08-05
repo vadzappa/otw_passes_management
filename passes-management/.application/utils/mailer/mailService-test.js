@@ -8,9 +8,9 @@ var _ = require('lodash'),
     featureName = _.last(__filename.split(path.sep)).replace('-test', ''),
     featurePath = path.join(__dirname, featureName),
     options = {
-        username: 'bachatakizombalv@gmail.com',
-        password: 'alwaysebachata',
-        sender: 'mail@mail.com'
+        username: '',
+        password: '',
+        sender: ''
     },
     PDFGenerator = require('../pdfGenerator/pdfGenerator'),
     QRGenerator = require('../qrGenerator/qrGenerator');
