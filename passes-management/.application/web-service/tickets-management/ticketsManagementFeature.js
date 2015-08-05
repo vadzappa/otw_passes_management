@@ -7,7 +7,8 @@ var _ = require('lodash'),
     CommonManagementFeature = require('../common/managementFeature'),
     ParticipantsService = require('../../db-service/services/participant'),
     PDFGenerator = require('../../utils/pdfGenerator/pdfGenerator'),
-    QRGenerator = require('../../utils/qrGenerator/qrGenerator');
+    QRGenerator = require('../../utils/qrGenerator/qrGenerator'),
+    MailService = require('../../utils/mailer/mailService');
 
 _.mixin(require('underscore.deferred'));
 
@@ -21,6 +22,7 @@ var TicketsManagementFeature = _.extend({
             .fail(TicketsManagementFeature.failure(request, reply));
     },
     emailTicket: function emailTicket(request, reply) {
+        var mailService = MailService.getInstance();
         reply().code(200);
     },
     downloadTicket: function downloadTicket(request, reply) {

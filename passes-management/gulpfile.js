@@ -17,9 +17,11 @@ var gulp = require('gulp'),
     del = require('del'),
     sass = require('gulp-sass'),
     es = require('event-stream'),
+    mocha = require('gulp-mocha'),
     clientJsFilesWildcard = './.web/**/*.js',
     clientScssFilesWildcard = './.web/**/*.scss',
     backendScssFilesWildcard = './.application/**/*.scss',
+    testFilesWildcard = './.application/**/*-test.js',
     vendorCssFilesWildcard = './vendor/**/*.css';
 
 gulp.task('clean-js', function (cb) {
@@ -85,6 +87,10 @@ gulp.task('build-js', function () {
     return bundledStream;
 });
 
+gulp.task('tests', function () {
+    return gulp.src(testFilesWildcard, {read: false})
+        .pipe(mocha({reporter: 'spec', timeout: 60 * 1000}));
+});
 
 gulp.task('build', ['clean-js', 'build-js', 'clean-css', 'build-styles']);
 gulp.task('js', ['clean-js', 'build-js']);

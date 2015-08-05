@@ -15,6 +15,7 @@ var _ = require('lodash'),
     ticketsManagement = require('./web-service/tickets-management/ticketsManagementFeature'),
     loginManagement = require('./web-service/login-management/loginManagementFeature'),
     loggingFeature = require('./utils/logging/loggingFeature'),
+    MailService = require('./utils/mailer/mailService'),
     dayCache = {
         expiresIn: 24 * 60 * 60 * 1000,
         privacy: 'public'
@@ -32,6 +33,8 @@ var PassesManagementPlugin = {
     register: function (server, options, next) {
 
         loggingFeature.bindToServer(server);
+
+        MailService.getInstance(options.mail);
 
         var accessControl = new AccessControl(options['access-control']);
         server.ext('onPreAuth', accessControl.checkAccess);

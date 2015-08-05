@@ -51,6 +51,11 @@
       }
     },
     "passes-management": {
+      "mail": {
+        "username": "$$GMAIL_USERNAME",
+        "password": "$$GMAIL_PASSWORD",
+        "sender": "OTW 2016 <bachatakizombalv@gmail.com>"
+      },
       "server": {
         "host": {
           "$filter": "system.env",
