@@ -21,23 +21,55 @@ var TicketsManagementFeature = _.extend({
             })
             .fail(TicketsManagementFeature.failure(request, reply));
     },
+    generateUserPdfFile: function generateUserPdfFile(host, participant) {
+        var svgPath = QRGenerator.generateSvgPath('http://' + host + '/validator/' + participant.ticketNumber + '/');
+
+        return PDFGenerator.preparePdfFile({
+            svgPath: svgPath,
+            documentTitle: 'Your ticket for 5th Latvian Sensual Dance festival - On The Wave 2016',
+            ticketNumber: participant.ticketNumber,
+            userDetails: participant.name + ' ' + participant.surname
+        });
+    },
     emailTicket: function emailTicket(request, reply) {
-        var mailService = MailService.getInstance();
-        reply().code(200);
+        var mailService = MailService.getInstance(),
+            serverHost = this.server.host,
+            wrapParticipantData = function (participant) {
+                var deferred = new _.Deferred();
+                var pdfDoc = TicketsManagementFeature.generateUserPdfFile(serverHost, participant);
+                process.nextTick(function () {
+                    deferred.resolve({
+                        subject: 'Your ticket for 5th Latvian Sensual Dance festival - On The Wave 2016',
+                        to: participant.email,
+                        attachments: [
+                            {
+                                filename: 'OTW_ticket_' + participant.ticketNumber + '.pdf',
+                                content: pdfDoc,
+                                contentType: 'application/pdf'
+                            }
+                        ],
+                        data: participant.toObject()
+                    });
+                    pdfDoc.end();
+                });
+                return deferred.promise();
+            };
+
+        _.when(ParticipantsService.byId(request.params.personId))
+            .then(wrapParticipantData)
+            .then(mailService.prepareAndSendMail.bind(mailService))
+            .done(function () {
+                reply().code(200);
+                // TODO update participant stauts to SENT
+            })
+            .fail(TicketsManagementFeature.failure(request, reply));
     },
     downloadTicket: function downloadTicket(request, reply) {
         var serverHost = this.server.host;
         _.when(ParticipantsService.byId(request.params.personId))
             .done(function (participant) {
 
-                var svgPath = QRGenerator.generateSvgPath('http://' + serverHost + '/validator/' + participant.ticketNumber + '/');
-
-                var pdfDoc = PDFGenerator.preparePdfFile({
-                    svgPath: svgPath,
-                    documentTitle: 'OTW 2016 Ticket',
-                    ticketNumber: participant.ticketNumber,
-                    userDetails: participant.name + ' ' + participant.surname
-                });
+                var pdfDoc = TicketsManagementFeature.generateUserPdfFile(serverHost, participant);
 
                 reply(pdfDoc)
                     .header('Content-Disposition', 'attachment; filename="OTW_ticket_' + participant.ticketNumber + '.pdf"');

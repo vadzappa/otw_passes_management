@@ -63,7 +63,7 @@ var PassesManagementPlugin = {
         server.route({
             method: 'GET',
             path: '/email/{personId}/',
-            handler: ticketsManagement.emailTicket,
+            handler: ticketsManagement.emailTicket.bind(options),
             config: {
                 cache: noCache
             }
